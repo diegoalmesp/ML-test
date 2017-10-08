@@ -1,0 +1,24 @@
+.ML-product-container {
+	background-color: #ffffff;
+	border-bottom: 1px solid #eeeeee;
+}
+
+.ML-product-container a {
+	color: inherit;
+}
+
+.ML-product-container a:hover {
+	color: inherit;
+}
+
+.ML-product-thumb {
+	padding: 16px;
+}
+
+.ML-product-specs {
+	padding-top: 30px;
+}
+
+.ML-product-state {
+	font-size: 12px;
+}
