@@ -14,6 +14,8 @@ class SearchBar extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentWillMount() {}
+
   handleSubmit(e) {
     e.preventDefault();
 

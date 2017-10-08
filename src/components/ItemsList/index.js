@@ -3,8 +3,19 @@ import './styles.css';
 import ItemComponent from '../ItemComponent';
 
 class ItemsList extends Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			products: {},
+			loading: true
+		}
+	}
+
   render() {
-    // products = JSON.parse(products);
+    if(this.state.loading) {
+    	return <div className="loading"></div>
+    }
 
     return (
     	<div className="">
