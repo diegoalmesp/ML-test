@@ -1,5 +1,5 @@
 import React from 'react';
 
-const Home = () => <p>No hay productos para mostrar</p>
+const Home = () => <span />
 
 export default Home;

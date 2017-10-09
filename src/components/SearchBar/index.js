@@ -11,17 +11,25 @@ class SearchBar extends Component {
   constructor(props) {
     super(props);
 
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = {
+      querySearch: "",
+      searchVal: ""
+    };
+
+    this._handleSubmit = this._handleSubmit.bind(this);
+    this._handleOnChange = this._handleOnChange.bind(this);
   }
 
-  componentWillMount() {}
-
-  handleSubmit(e) {
+  _handleSubmit(e) {
     e.preventDefault();
 
-    console.log(e.target.findProduct.value);
+    this.setState({ querySearch: e.target.findProduct.value });
 
     this.props.history.push(`/items?q=${e.target.findProduct.value}`);
+  }
+
+  _handleOnChange(e) {
+    this.setState({ searchVal: e.target.value });
   }
 
   render() {
@@ -38,7 +46,7 @@ class SearchBar extends Component {
             </Link>
           </div>
 
-          <form className="navbar-form navbar-left" role="search" onSubmit={ this.handleSubmit }>
+          <form className="navbar-form navbar-left" role="search" onSubmit={ this._handleSubmit }>
             <div className="form-group">
               <div className="input-group">
 
@@ -46,7 +54,9 @@ class SearchBar extends Component {
                   type="text"
                   className="form-control"
                   id="findProduct"
-                  placeholder={ placeholder } />
+                  placeholder={ placeholder }
+                  value={ this.state.searchVal }
+                  onChange={ this._handleOnChange } />
 
                 <div className="input-group-addon">
                   <img alt={ alt_icono } src={ ic_search } />
