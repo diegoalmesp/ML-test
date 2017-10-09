@@ -10,6 +10,8 @@ class ItemsList extends Component {
 			products: {},
 			loading: true
 		}
+
+		console.info(this.props);
 	}
 
 	componentWillMount() {
@@ -30,7 +32,6 @@ class ItemsList extends Component {
 				return response.json();
 			}).then((data) => {
 				this.setState({ products: data, loading: !this.state.loading });
-				console.info(this.state.products);
 			}).catch((err) => {
 				console.error(err);
 			});
