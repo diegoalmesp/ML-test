@@ -11,7 +11,7 @@ class ItemsList extends Component {
 			loading: true
 		}
 
-		console.info(this.props);
+		console.info(this.props.match.params);
 	}
 
 	componentWillMount() {
