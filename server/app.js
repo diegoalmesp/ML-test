@@ -28,45 +28,27 @@ app.get('/api/items/:id?', (req, res) => {
 
 	if(query !== undefined) {
 
-		// fetch(`${URL}/sites/MLA/search?q=${query}&limit=${limit}`)
-		// 	.then((response) => {
-		// 		if(response.status !== 200) {
-		// 			console.log(`ocurrió un problema. Status: ${response.status}`);
-		// 			return;
-		// 		}
-		// 		response.json().then((data) => {
-		// 			res.send(data);
-		// 			return;
-		// 		});
-		// 	});
-
-		// let productList = fetchProductsList(query, limit, URL);
-		// console.log(productList);
-
 		let productsFetched = fetchListOfProducts(query);
 
 		productsFetched.then(prods => {
+			let singleProductsAndCategories = [];
+
 			prods.results.map(prod => {
-				let singleProduct = [];
-				singleProduct.push(fetchFirstProductImage(prod.id));
-
-				Promise.all(singleProduct).then(products => {
-					console.info(products);
-				}).catch(reason => {
-					console.error(reason);
-				});
+				singleProductsAndCategories.push(fetchFirstProductImage(prod.id));
 			});
+			singleProductsAndCategories.push(fetchCategories(prods));
 
-			let categoriesFetched = fetchCategories(prods);
+			Promise.all(singleProductsAndCategories).then(result => {
+				let finalList = createProductList(prods, result);
 
-			categoriesFetched.then(cat => {
-				let productsList = createProductList(prods, cat);
+				console.log(finalList);
 
-				// console.info(productsList);
+				res.send(finalList);
+
+			}).catch(reason => {
+				console.error(reason);
 			});
 		});
-
-		// console.log(fetch)
 
 	} else if(prodID !== undefined) {
 
@@ -101,48 +83,12 @@ app.get('/api/items/:id?', (req, res) => {
 	
 });
 
-function fetchSearch(query) {}
-
-function fetchProduct(query) {}
-
-// function fetchProductsList(query, limit, URL) {
-// 	const URL = 'https://api.mercadolibre.com';
-// 	const limit = 4;
-
-// 	let list = {};
-// 	let categories = {};
-
-// 	fetch(`${URL}/sites/MLA/search?q=${query}&limit=${limit}`)
-// 			.then((response) => {
-// 				if(response.status !== 200) {
-// 					console.log(`ocurrió un problema. Status: ${response.status}`);
-// 					return;
-// 				}
-// 				response.json().then((prod) => {
-// 					//res.send(prod);
-// 					list = prod;
-
-// 					fetch(`${URL}/categories/${list.results[0].category_id}`)
-// 						.then((response) => {
-// 							if(response.status !== 200) {
-// 								console.log(`ocurrió un problema. Status: ${response.status}`);
-// 								return;
-// 							}
-// 							response.json().then((cat) => {
-// 								//res.send(cat);
-// 								categories = cat;
-
-// 								let products = createProductList(list, categories);
-
-// 								return products;
-
-// 							});
-// 						});
-// 				});
-// 			});
-// }
-
-function createProductList(list, categories) {
+/**
+ * crear las listas de productos para 
+ * ser enviados a la app de react js
+ *
+ */
+function createProductList(list, singleProdAndCategories) {
 	let productsList = {};
 	productsList.author = {}
 	productsList.author.name = 'Diego';
@@ -150,7 +96,7 @@ function createProductList(list, categories) {
 
 	let categoriesArray = [];
 
-	categories.path_from_root.map((category) => {
+	singleProdAndCategories[singleProdAndCategories.length - 1].path_from_root.map((category) => {
 		categoriesArray.push(category.name);
 	});
 
@@ -158,7 +104,7 @@ function createProductList(list, categories) {
 
 	productsList.items = [];
 
-	list.results.map((product) => {
+	list.results.map((product, index) => {
 		let item = {};
 		item.id = product.id;
 		item.title = product.title;
@@ -167,16 +113,15 @@ function createProductList(list, categories) {
 			amount: product.price,
 			decimals: 00
 		}
-		item.picture = product.thumbnail;
+		item.picture = singleProdAndCategories[index].pictures[0].url;
 		item.condition = product.condition;
 		item.free_shipping = product.shipping.free_shipping;
+		item.address = product.address.state_name;
 
 		productsList.items.push(item);
 	});
 
 	return productsList;
-
-	// console.log(productsList);
 }
 
 function createSingleProduct(data) {}
