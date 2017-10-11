@@ -16,8 +16,6 @@ const App = () => (
         <SearchBar />
       </header>
       <section className="container ML-container">
-        <p className="ML-breadcrubs">Categoría 1 > Categoría 2 > Categoría 3 > <span>Categoría 4</span></p>
-
         <Route exact path="/" component={ Home } />
         <Route exact path="/items" component={ ItemsList } />
         <Route path="/items/:id" component={ Item } />

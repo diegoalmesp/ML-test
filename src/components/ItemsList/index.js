@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './styles.css';
 import ItemComponent from '../ItemComponent';
+import Breadcrumbs from '../Breadcrumbs';
 
 const endpoint = 'http://localhost:3001/api';
 
@@ -60,6 +61,7 @@ class ItemsList extends Component {
 
     return (
     	<div className="">
+    		<Breadcrumbs list={this.state.products.categories} />
 	      {list.map((product) => {
 	      	return <ItemComponent key={product.id} product={product} />
 	      })}
