@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './styles.css';
-import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
+import ReactHtmlParser from 'react-html-parser';
 
 class Item extends Component {
   constructor(props) {
@@ -45,7 +45,7 @@ class Item extends Component {
             <p>{ ReactHtmlParser(product.description) }</p>
           </div>
           <div className="col-md-4">
-            <p>{ product.condition == 'new' ? 'Nuevo' : 'Usado' } - { product.sold_quantity > 1 ? `${product.sold_quantity} vendidos` : `${product.sold_quantity} vendido` }</p>
+            <p>{ product.condition === 'new' ? 'Nuevo' : 'Usado' } - { product.sold_quantity > 1 ? `${product.sold_quantity} vendidos` : `${product.sold_quantity} vendido` }</p>
             <h4>{ product.title }</h4>
             <h1>$ { product.price.amount }</h1>
             <div className="block20"></div>
