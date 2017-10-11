@@ -63,7 +63,6 @@ app.get('/api/items/:id?', (req, res) => {
 			jobs.push(fetchCategories(prod.category_id));
 
 			Promise.all(jobs).then(result => {
-				console.log(result);
 
 				let finalProduct = createSingleProduct(prod, result);
 

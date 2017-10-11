@@ -22,9 +22,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(null, mapDispatchToProps)(Home);
-
-// import React from 'react';
-
-// const Home = () => <span />
-
-// export default Home;
