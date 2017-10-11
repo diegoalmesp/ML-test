@@ -33,14 +33,14 @@ app.get('/api/items/:id?', (req, res) => {
 		let productsFetched = fetchListOfProducts(query);
 
 		productsFetched.then(prods => {
-			let singleProductsAndCategories = [];
+			let jobs = [];
 
 			prods.results.map(prod => {
-				singleProductsAndCategories.push(fetchFirstProductImage(prod.id));
+				jobs.push(fetchFirstProductImage(prod.id));
 			});
-			singleProductsAndCategories.push(fetchCategories(prods));
+			jobs.push(fetchCategories(prods.results[0].category_id));
 
-			Promise.all(singleProductsAndCategories).then(result => {
+			Promise.all(jobs).then(result => {
 				let finalList = createProductList(prods, result);
 
 				res.send(finalList);
@@ -53,14 +53,19 @@ app.get('/api/items/:id?', (req, res) => {
 	} else if(prodID !== undefined) {
 
 		let product = {},
-				description = '';
+				description = '',
+				categories = [];
 
 		product = fetchSingleProduct(prodID);
 		product.then(prod => {
-			description = fetchProductDescription(prodID);
+			let jobs = [];
+			jobs.push(fetchProductDescription(prodID));
+			jobs.push(fetchCategories(prod.category_id));
 
-			description.then(descr => {
-				let finalProduct = createSingleProduct(prod, descr);
+			Promise.all(jobs).then(result => {
+				console.log(result);
+
+				let finalProduct = createSingleProduct(prod, result);
 
 				res.send(finalProduct);
 			});
@@ -83,7 +88,7 @@ function createProductList(list, singleProdAndCategories) {
 
 	let categoriesArray = [];
 
-	singleProdAndCategories[singleProdAndCategories.length - 1].path_from_root.map((category) => {
+	singleProdAndCategories[singleProdAndCategories.length - 1].path_from_root.map(category => {
 		categoriesArray.push(category.name);
 	});
 
@@ -111,7 +116,7 @@ function createProductList(list, singleProdAndCategories) {
 	return productsList;
 }
 
-function createSingleProduct(prod, desc) {
+function createSingleProduct(prod, result) {
 	let newProd = {};
 	newProd.author = {}
 	newProd.author.name = 'Diego';
@@ -129,7 +134,13 @@ function createSingleProduct(prod, desc) {
 	newProd.condition = prod.condition;
 	newProd.free_shipping = prod.shipping.free_shipping;
 	newProd.sold_quantity = prod.sold_quantity;
-	newProd.description = desc.text;
+	newProd.description = result[0].text;
+
+	let categoriesArray = [];
+	result[1].path_from_root.map(category => {
+		categoriesArray.push(category.name);
+	});
+	newProd.categories = categoriesArray;
 
 	return newProd;
 }

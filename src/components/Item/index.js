@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import './styles.css';
 import ReactHtmlParser from 'react-html-parser';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as breadcrumbsActions from '../../actions/breadcrumbsActions';
 
 class Item extends Component {
   constructor(props) {
@@ -17,6 +20,7 @@ class Item extends Component {
 
     product.then((data) => {
         this.setState({ product: data, loading: !this.state.loading });
+        this.props.actions.updateBreadcrumbs(data.categories);
       }).catch((err) => {
         console.error(err);
       })
@@ -54,7 +58,7 @@ class Item extends Component {
             <div className="block32" />
             <h1>$ { product.price.amount }</h1>
             <div className="block32" />
-            <button type="button" class="btn btn-primary btn-lg btn-block ML-btn-blue">Comprar</button>
+            <button type="button" className="btn btn-primary btn-lg btn-block ML-btn-blue">Comprar</button>
           </div>
         </div>
       </div>
@@ -62,4 +66,10 @@ class Item extends Component {
   }
 };
 
-export default Item;
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(breadcrumbsActions, dispatch)
+  };
+}
+
+export default connect(null, mapDispatchToProps)(Item);

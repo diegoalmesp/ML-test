@@ -13,8 +13,8 @@ function fetchListOfProducts(query) {
 		});
 }
 
-function fetchCategories(list) {
-	return fetch(`${URL}/categories/${list.results[0].category_id}`)
+function fetchCategories(categ) {
+	return fetch(`${URL}/categories/${categ}`)
 		.then((response) => {
 			if(response.status !== 200) {
 				console.log(`ocurrió un problema. Status: ${response.status}`);

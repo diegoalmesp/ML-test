@@ -1,5 +1,30 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as breadcrumbsActions from '../../actions/breadcrumbsActions';
 
-const Home = () => <span />
+const endpoint = 'http://localhost:3001/api';
 
-export default Home;
+class Home extends Component {
+	componentDidMount() {
+		this.props.actions.updateBreadcrumbs([]);
+	}
+
+  render() {
+    return (<span />);
+  }
+};
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(breadcrumbsActions, dispatch)
+  };
+}
+
+export default connect(null, mapDispatchToProps)(Home);
+
+// import React from 'react';
+
+// const Home = () => <span />
+
+// export default Home;

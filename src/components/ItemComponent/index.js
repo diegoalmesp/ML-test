@@ -16,7 +16,7 @@ const ItemComponent = ({product}) => (
             <div className="block16" />
             <h3>
               $ { product.price.amount }
-              { product.free_shipping ? <img className="ML-free-shipping" src={ic_shipping} /> : '' }
+              { product.free_shipping ? <img className="ML-free-shipping" src={ic_shipping} alt="ícono envío gratis" /> : '' }
             </h3>
             { this.priceAndShipment }
             <div className="block32" />
