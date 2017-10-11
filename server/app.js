@@ -112,8 +112,6 @@ function createProductList(list, singleProdAndCategories) {
 }
 
 function createSingleProduct(prod, desc) {
-
-	console.log(desc);
 	let newProd = {};
 	newProd.author = {}
 	newProd.author.name = 'Diego';

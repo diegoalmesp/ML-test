@@ -48,6 +48,8 @@ class Item extends Component {
             <p>{ product.condition == 'new' ? 'Nuevo' : 'Usado' } - { product.sold_quantity > 1 ? `${product.sold_quantity} vendidos` : `${product.sold_quantity} vendido` }</p>
             <h4>{ product.title }</h4>
             <h1>$ { product.price.amount }</h1>
+            <div className="block20"></div>
+            <button type="button" class="btn btn-primary btn-lg btn-block">Comprar</button>
           </div>
         </div>
       </div>

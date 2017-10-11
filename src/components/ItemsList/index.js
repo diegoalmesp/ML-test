@@ -57,7 +57,6 @@ class ItemsList extends Component {
     if(this.state.loading) {
     	return <div className="loading"></div>
     }
-    console.info(list);
 
     return (
     	<div className="">
