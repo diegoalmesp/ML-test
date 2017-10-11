@@ -7,7 +7,9 @@ require('isomorphic-fetch');
 const {
 	fetchListOfProducts,
 	fetchCategories,
-	fetchFirstProductImage } = require('./fetchData');
+	fetchFirstProductImage,
+	fetchSingleProduct,
+	fetchProductDescription } = require('./fetchData');
 
 
 const app = express();
@@ -41,8 +43,6 @@ app.get('/api/items/:id?', (req, res) => {
 			Promise.all(singleProductsAndCategories).then(result => {
 				let finalList = createProductList(prods, result);
 
-				console.log(finalList);
-
 				res.send(finalList);
 
 			}).catch(reason => {
@@ -55,29 +55,16 @@ app.get('/api/items/:id?', (req, res) => {
 		let product = {},
 				description = '';
 
-		fetch(`${URL}/items/${prodID}`)
-			.then((response) => {
-				if(response.status !== 200) {
-					console.log(`ocurrió un problema. Status: ${response.status}`);
-					return;
-				}
-				response.json().then((data) => {
-					product = data;
+		product = fetchSingleProduct(prodID);
+		product.then(prod => {
+			description = fetchProductDescription(prodID);
 
-					fetch(`${URL}/items/${prodID}/description`)
-						.then((response) => {
-							if(response.status !== 200) {
-								console.log(`ocurrió un problema. Status: ${response.status}`);
-								return;
-							}
-							response.json().then((data) => {
-								product.description = data.text;
+			description.then(descr => {
+				let finalProduct = createSingleProduct(prod, descr);
 
-								res.send(product);
-							});
-						});
-				});
+				res.send(finalProduct);
 			});
+		});
 	}
 
 	
@@ -124,6 +111,29 @@ function createProductList(list, singleProdAndCategories) {
 	return productsList;
 }
 
-function createSingleProduct(data) {}
+function createSingleProduct(prod, desc) {
+
+	console.log(desc);
+	let newProd = {};
+	newProd.author = {}
+	newProd.author.name = 'Diego';
+	newProd.author.lastname = 'Almirón';
+
+	newProd.item = {};
+	newProd.id = prod.id;
+	newProd.title = prod.title;
+	newProd.price = {
+		currency: prod.currency_id,
+		amount: prod.price,
+		decimals: 00
+	};
+	newProd.picture = prod.pictures[0].url;
+	newProd.condition = prod.condition;
+	newProd.free_shipping = prod.shipping.free_shipping;
+	newProd.sold_quantity = prod.sold_quantity;
+	newProd.description = desc.text;
+
+	return newProd;
+}
 
 module.exports = app;

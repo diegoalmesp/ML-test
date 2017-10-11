@@ -12,18 +12,20 @@ class Item extends Component {
     }
   }
 
-  componentWillMount() {
-    this._getProduct(this.props.match.params.id);
-  }
+  componentDidMount() {
+    let product = this._getProduct(this.props.match.params.id);
 
-  _getProduct(search) {
-    fetch(`http://localhost:3001/api/items/${search}`)
-      .then((response) => {
-        return response.json();
-      }).then((data) => {
+    product.then((data) => {
         this.setState({ product: data, loading: !this.state.loading });
       }).catch((err) => {
         console.error(err);
+      })
+  }
+
+  _getProduct(search) {
+    return fetch(`http://localhost:3001/api/items/${search}`)
+      .then((response) => {
+        return response.json();
       });
   }
 
@@ -38,14 +40,14 @@ class Item extends Component {
       <div className="row ML-details-container">
         <div className="row">
           <div className="col-md-8">
-            <img src={ product.pictures[0].url } alt="Imagen de producto" />
+            <img src={ product.picture } alt="Imagen de producto" />
             <h3>Descripción del producto</h3>
             <p>{ ReactHtmlParser(product.description) }</p>
           </div>
           <div className="col-md-4">
             <p>{ product.condition == 'new' ? 'Nuevo' : 'Usado' } - { product.sold_quantity > 1 ? `${product.sold_quantity} vendidos` : `${product.sold_quantity} vendido` }</p>
             <h4>{ product.title }</h4>
-            <h1>$ { product.price }</h1>
+            <h1>$ { product.price.amount }</h1>
           </div>
         </div>
       </div>

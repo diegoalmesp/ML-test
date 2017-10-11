@@ -35,8 +35,32 @@ function fetchFirstProductImage(prodID) {
 		});
 }
 
+function fetchSingleProduct(prodID) {
+	return fetch(`${URL}/items/${prodID}`)
+		.then((response) => {
+			if(response.status !== 200) {
+				console.log(`ocurrió un problema. Status: ${response.status}`);
+				return;
+			}
+			return response.json();
+		});
+}
+
+function fetchProductDescription(prodID) {
+	return fetch(`${URL}/items/${prodID}/description`)
+		.then((response) => {
+			if(response.status !== 200) {
+				console.log(`ocurrió un problema. Status: ${response.status}`);
+				return;
+			}
+			return response.json();
+		});
+}
+
 module.exports = {
 	fetchListOfProducts: fetchListOfProducts,
 	fetchCategories: fetchCategories,
-	fetchFirstProductImage: fetchFirstProductImage
+	fetchFirstProductImage: fetchFirstProductImage,
+	fetchSingleProduct: fetchSingleProduct,
+	fetchProductDescription: fetchProductDescription
 };
