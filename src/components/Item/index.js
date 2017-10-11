@@ -41,15 +41,20 @@ class Item extends Component {
         <div className="row">
           <div className="col-md-8">
             <img src={ product.picture } alt="Imagen de producto" />
+            <div className="block32" />
+            <div className="block32" />
             <h3>Descripción del producto</h3>
+            <div className="block32" />
             <p>{ ReactHtmlParser(product.description) }</p>
           </div>
           <div className="col-md-4">
             <p>{ product.condition === 'new' ? 'Nuevo' : 'Usado' } - { product.sold_quantity > 1 ? `${product.sold_quantity} vendidos` : `${product.sold_quantity} vendido` }</p>
-            <h4>{ product.title }</h4>
+            <div className="block16" />
+            <h3>{ product.title }</h3>
+            <div className="block32" />
             <h1>$ { product.price.amount }</h1>
-            <div className="block20"></div>
-            <button type="button" class="btn btn-primary btn-lg btn-block">Comprar</button>
+            <div className="block32" />
+            <button type="button" class="btn btn-primary btn-lg btn-block ML-btn-blue">Comprar</button>
           </div>
         </div>
       </div>

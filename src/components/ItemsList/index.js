@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as breadcrumbsActions from '../../actions/breadcrumbsActions';
 import './styles.css';
 import ItemComponent from '../ItemComponent';
-import Breadcrumbs from '../Breadcrumbs';
 
 const endpoint = 'http://localhost:3001/api';
 
@@ -20,6 +22,7 @@ class ItemsList extends Component {
 
 		content.then((data) => {
 			this.setState({ products: data, loading: !this.state.loading });
+			this.props.actions.updateBreadcrumbs(data.categories);
 		}).catch((err) => {
 			console.error(err);
 		});
@@ -31,11 +34,11 @@ class ItemsList extends Component {
     let content = this._getContent(nextProps.location.search);
 
     content.then((data) => {
-			console.log(`received data: ${data}`);
 			this.setState({
 				products: data,
 				loading: !this.state.loading
 			});
+			this.props.actions.updateBreadcrumbs(data.categories);
 		}).catch((err) => {
 			console.error(err);
 		});
@@ -60,7 +63,6 @@ class ItemsList extends Component {
 
     return (
     	<div className="">
-    		<Breadcrumbs list={this.state.products.categories} />
 	      {list.map((product) => {
 	      	return <ItemComponent key={product.id} product={product} />
 	      })}
@@ -69,4 +71,10 @@ class ItemsList extends Component {
   }
 };
 
-export default ItemsList;
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(breadcrumbsActions, dispatch)
+  };
+}
+
+export default connect(null, mapDispatchToProps)(ItemsList);

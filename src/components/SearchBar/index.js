@@ -23,6 +23,8 @@ class SearchBar extends Component {
   _handleSubmit(e) {
     e.preventDefault();
 
+    if(e.target.findProduct.value === '') return;
+
     this.setState({ querySearch: e.target.findProduct.value });
 
     this.props.history.push(`/items?q=${e.target.findProduct.value}`);
@@ -58,9 +60,9 @@ class SearchBar extends Component {
                   value={ this.state.searchVal }
                   onChange={ this._handleOnChange } />
 
-                <div className="input-group-addon">
+                <button className="btn btn-default ML-button-search" type="submit">
                   <img alt={ alt_icono } src={ ic_search } />
-                </div>
+                </button>
               </div>
             </div>
           </form>

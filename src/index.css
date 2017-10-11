@@ -5,6 +5,20 @@ body {
   background-color: #eeeeee;
 }
 
+h1, h2, h3, h4, p { margin: 0; padding: 0; }
+
+.block12 {
+	height: 12px;
+}
+
+.block16 {
+	height: 16px;
+}
+
 .block20 {
 	height: 20px;
+}
+
+.block32 {
+	height: 32px;
 }

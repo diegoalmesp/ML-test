@@ -10,10 +10,15 @@
 
 .ML-product-thumb {
 	padding: 16px;
+	img { border-radius: 4px; }
 }
 
 .ML-product-specs {
-	padding-top: 30px;
+	padding-top: 25px;
+
+	.ML-free-shipping {
+		padding: 3px 5px;
+	}
 }
 
 .ML-product-state {

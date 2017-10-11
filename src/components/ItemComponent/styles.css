@@ -1,24 +1,20 @@
 .ML-product-container {
-	background-color: #ffffff;
-	border-bottom: 1px solid #eeeeee;
-}
-
-.ML-product-container a {
-	color: inherit;
-}
-
-.ML-product-container a:hover {
-	color: inherit;
-}
+  background-color: #ffffff;
+  border-bottom: 1px solid #eeeeee; }
+  .ML-product-container a {
+    color: inherit; }
+    .ML-product-container a:hover {
+      color: inherit; }
 
 .ML-product-thumb {
-	padding: 16px;
-}
+  padding: 16px; }
+  .ML-product-thumb img {
+    border-radius: 4px; }
 
 .ML-product-specs {
-	padding-top: 30px;
-}
+  padding-top: 25px; }
+  .ML-product-specs .ML-free-shipping {
+    padding: 3px 5px; }
 
 .ML-product-state {
-	font-size: 12px;
-}
+  font-size: 12px; }
