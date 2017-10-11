@@ -1,7 +1,13 @@
 const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
+
 require('isomorphic-fetch');
+
+const {
+	fetchListOfProducts,
+	fetchCategories,
+	fetchFirstProductImage } = require('./fetchData');
 
 
 const app = express();
@@ -22,19 +28,45 @@ app.get('/api/items/:id?', (req, res) => {
 
 	if(query !== undefined) {
 
-		fetch(`${URL}/sites/MLA/search?q=${query}&limit=${limit}`)
-			.then((response) => {
-				if(response.status !== 200) {
-					console.log(`ocurrió un problema. Status: ${response.status}`);
-					return;
-				}
-				response.json().then((data) => {
-					res.send(data);
-					return;
+		// fetch(`${URL}/sites/MLA/search?q=${query}&limit=${limit}`)
+		// 	.then((response) => {
+		// 		if(response.status !== 200) {
+		// 			console.log(`ocurrió un problema. Status: ${response.status}`);
+		// 			return;
+		// 		}
+		// 		response.json().then((data) => {
+		// 			res.send(data);
+		// 			return;
+		// 		});
+		// 	});
+
+		// let productList = fetchProductsList(query, limit, URL);
+		// console.log(productList);
+
+		let productsFetched = fetchListOfProducts(query);
+
+		productsFetched.then(prods => {
+			prods.results.map(prod => {
+				let singleProduct = [];
+				singleProduct.push(fetchFirstProductImage(prod.id));
+
+				Promise.all(singleProduct).then(products => {
+					console.info(products);
+				}).catch(reason => {
+					console.error(reason);
 				});
 			});
 
-		fetchProductsList(query, limit, URL);
+			let categoriesFetched = fetchCategories(prods);
+
+			categoriesFetched.then(cat => {
+				let productsList = createProductList(prods, cat);
+
+				// console.info(productsList);
+			});
+		});
+
+		// console.log(fetch)
 
 	} else if(prodID !== undefined) {
 
@@ -73,43 +105,42 @@ function fetchSearch(query) {}
 
 function fetchProduct(query) {}
 
-function fetchProductsList(query, limit, URL) {
-	// const URL = 'https://api.mercadolibre.com';
-	// const limit = 4;
+// function fetchProductsList(query, limit, URL) {
+// 	const URL = 'https://api.mercadolibre.com';
+// 	const limit = 4;
 
-	let list = {};
-	let categories = {};
+// 	let list = {};
+// 	let categories = {};
 
-	fetch(`${URL}/sites/MLA/search?q=${query}&limit=${limit}`)
-			.then((response) => {
-				if(response.status !== 200) {
-					console.log(`ocurrió un problema. Status: ${response.status}`);
-					return;
-				}
-				response.json().then((prod) => {
-					//res.send(prod);
-					list = prod;
+// 	fetch(`${URL}/sites/MLA/search?q=${query}&limit=${limit}`)
+// 			.then((response) => {
+// 				if(response.status !== 200) {
+// 					console.log(`ocurrió un problema. Status: ${response.status}`);
+// 					return;
+// 				}
+// 				response.json().then((prod) => {
+// 					//res.send(prod);
+// 					list = prod;
 
-					fetch(`${URL}/categories/${list.results[0].category_id}`)
-						.then((response) => {
-							if(response.status !== 200) {
-								console.log(`ocurrió un problema. Status: ${response.status}`);
-								return;
-							}
-							response.json().then((cat) => {
-								//res.send(cat);
-								categories = cat;
+// 					fetch(`${URL}/categories/${list.results[0].category_id}`)
+// 						.then((response) => {
+// 							if(response.status !== 200) {
+// 								console.log(`ocurrió un problema. Status: ${response.status}`);
+// 								return;
+// 							}
+// 							response.json().then((cat) => {
+// 								//res.send(cat);
+// 								categories = cat;
 
-								createProductList(list, categories);
+// 								let products = createProductList(list, categories);
 
-								// console.log(list);
+// 								return products;
 
-								// console.log(categories);
-							});
-						});
-				});
-			});
-}
+// 							});
+// 						});
+// 				});
+// 			});
+// }
 
 function createProductList(list, categories) {
 	let productsList = {};
@@ -143,7 +174,9 @@ function createProductList(list, categories) {
 		productsList.items.push(item);
 	});
 
-	console.log(productsList);
+	return productsList;
+
+	// console.log(productsList);
 }
 
 function createSingleProduct(data) {}
